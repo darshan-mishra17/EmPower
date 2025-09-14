@@ -1,0 +1,135 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "Skip to main content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - region "Accessibility toolbar" [ref=e5]:
+    - button "Accessibility Options ▼" [ref=e7] [cursor=pointer]:
+      - generic [ref=e8] [cursor=pointer]: Accessibility Options
+      - generic [ref=e9] [cursor=pointer]: ▼
+  - navigation "Main navigation" [ref=e10]:
+    - generic [ref=e12]:
+      - link "Inclusive Learning Hub - Home" [ref=e13] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14] [cursor=pointer]
+        - generic [ref=e17] [cursor=pointer]: Inclusive Learning Hub
+      - generic [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Community" [ref=e21] [cursor=pointer]:
+          - /url: /community
+        - link "Login" [ref=e22] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e23]:
+    - generic [ref=e25]:
+      - navigation "Student dashboard navigation" [ref=e26]:
+        - generic [ref=e27]:
+          - heading "Student Portal" [level=2] [ref=e28]
+          - navigation [ref=e29]:
+            - list [ref=e30]:
+              - listitem [ref=e31]:
+                - link "My Courses" [ref=e32] [cursor=pointer]:
+                  - /url: "#courses"
+                  - img [ref=e33] [cursor=pointer]
+                  - generic [ref=e36] [cursor=pointer]: My Courses
+              - listitem [ref=e37]:
+                - link "Progress" [ref=e38] [cursor=pointer]:
+                  - /url: "#progress"
+                  - img [ref=e39] [cursor=pointer]
+                  - generic [ref=e42] [cursor=pointer]: Progress
+              - listitem [ref=e43]:
+                - link "Accessibility Settings" [ref=e44] [cursor=pointer]:
+                  - /url: /accessibility
+                  - img [ref=e45] [cursor=pointer]
+                  - generic [ref=e48] [cursor=pointer]: Accessibility Settings
+              - listitem [ref=e49]:
+                - link "Community" [ref=e50] [cursor=pointer]:
+                  - /url: /community
+                  - img [ref=e51] [cursor=pointer]
+                  - generic [ref=e56] [cursor=pointer]: Community
+      - main [ref=e57]:
+        - generic [ref=e58]:
+          - heading "Welcome back, Sarah! 👋" [level=1] [ref=e59]
+          - paragraph [ref=e60]: Ready to continue your learning journey? You have 3 active courses.
+        - generic [ref=e61]:
+          - generic [ref=e63]:
+            - img [ref=e64]
+            - generic [ref=e67]:
+              - paragraph [ref=e68]: Active Courses
+              - paragraph [ref=e69]: "3"
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - generic [ref=e75]:
+              - paragraph [ref=e76]: Hours Studied
+              - paragraph [ref=e77]: "24"
+          - generic [ref=e79]:
+            - img [ref=e80]
+            - generic [ref=e83]:
+              - paragraph [ref=e84]: Avg. Progress
+              - paragraph [ref=e85]: 50%
+        - region "My Courses" [ref=e86]:
+          - heading "My Courses" [level=2] [ref=e87]
+          - generic [ref=e90]:
+            - heading "Introduction to Inclusive Education" [level=3] [ref=e91]:
+              - link "Introduction to Inclusive Education" [ref=e92] [cursor=pointer]:
+                - /url: /course/68c5dd80906d5d9c10d90259
+            - paragraph [ref=e93]: Learn the basics of inclusive education practices.
+            - generic [ref=e94]:
+              - generic [ref=e95]:
+                - generic [ref=e96]: Progress
+                - generic [ref=e97]: "%"
+              - 'progressbar "Course progress: undefined%" [ref=e99]'
+            - generic [ref=e100]:
+              - generic [ref=e101]: / lessons
+              - generic [ref=e102]: studied
+            - link "Continue Learning" [ref=e103] [cursor=pointer]:
+              - /url: /course/68c5dd80906d5d9c10d90259
+  - contentinfo [ref=e104]:
+    - generic [ref=e105]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - heading "Contact Us" [level=3] [ref=e108]
+          - generic [ref=e109]:
+            - generic [ref=e110]:
+              - img [ref=e111]
+              - link "Email support at support@inclusivelearning.edu" [ref=e114] [cursor=pointer]:
+                - /url: mailto:support@inclusivelearning.edu
+                - text: support@inclusivelearning.edu
+            - generic [ref=e115]:
+              - img [ref=e116]
+              - link "Call us at 1-234-567-8900" [ref=e118] [cursor=pointer]:
+                - /url: tel:+1234567890
+                - text: 1-234-567-8900
+        - generic [ref=e119]:
+          - heading "Quick Links" [level=3] [ref=e120]
+          - navigation "Footer navigation" [ref=e121]:
+            - list [ref=e122]:
+              - listitem [ref=e123]:
+                - link "About Us" [ref=e124] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e125]:
+                - link "Accessibility Settings" [ref=e126] [cursor=pointer]:
+                  - /url: /accessibility
+              - listitem [ref=e127]:
+                - link "Community" [ref=e128] [cursor=pointer]:
+                  - /url: /community
+        - generic [ref=e129]:
+          - heading "Accessibility" [level=3] [ref=e130]
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - img [ref=e133]
+              - generic [ref=e136]: WCAG 2.1 AA Compliant
+            - paragraph [ref=e137]: This platform is designed to be accessible to all learners, including those with disabilities.
+            - link "Customize accessibility settings" [ref=e138] [cursor=pointer]:
+              - /url: /accessibility
+      - paragraph [ref=e140]:
+        - text: © 2025 Inclusive Learning Hub. All rights reserved. |
+        - link "Privacy Policy" [ref=e141] [cursor=pointer]:
+          - /url: /privacy
+        - text: "|"
+        - link "Terms of Service" [ref=e142] [cursor=pointer]:
+          - /url: /terms
+```

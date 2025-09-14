@@ -1,0 +1,169 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "Skip to main content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - region "Accessibility toolbar" [ref=e5]:
+    - button "Accessibility Options ▼" [ref=e7] [cursor=pointer]:
+      - generic [ref=e8] [cursor=pointer]: Accessibility Options
+      - generic [ref=e9] [cursor=pointer]: ▼
+  - navigation "Main navigation" [ref=e10]:
+    - generic [ref=e12]:
+      - link "Inclusive Learning Hub - Home" [ref=e13] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14] [cursor=pointer]
+        - generic [ref=e17] [cursor=pointer]: Inclusive Learning Hub
+      - generic [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Community" [ref=e21] [cursor=pointer]:
+          - /url: /community
+        - link "Login" [ref=e22] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - img [ref=e28]
+          - heading "Admin Panel" [level=1] [ref=e30]
+        - paragraph [ref=e31]: Manage users, review content, and monitor platform analytics
+      - tablist "Admin panel sections" [ref=e34]:
+        - tab "User Management" [selected] [ref=e35] [cursor=pointer]:
+          - img [ref=e36] [cursor=pointer]
+          - generic [ref=e41] [cursor=pointer]: User Management
+        - tab "Content Review" [ref=e42] [cursor=pointer]:
+          - img [ref=e43] [cursor=pointer]
+          - generic [ref=e46] [cursor=pointer]: Content Review
+        - tab "Analytics" [ref=e47] [cursor=pointer]:
+          - img [ref=e48] [cursor=pointer]
+          - generic [ref=e50] [cursor=pointer]: Analytics
+      - tabpanel [ref=e52]:
+        - generic [ref=e53]:
+          - heading "User Management" [level=2] [ref=e54]
+          - generic [ref=e55]:
+            - generic [ref=e57]:
+              - img [ref=e58]
+              - generic [ref=e63]:
+                - paragraph [ref=e64]: Total Users
+                - paragraph [ref=e65]: "1247"
+            - generic [ref=e67]:
+              - generic [ref=e69]: S
+              - generic [ref=e70]:
+                - paragraph [ref=e71]: Students
+                - paragraph [ref=e72]: "856"
+            - generic [ref=e74]:
+              - generic [ref=e76]: T
+              - generic [ref=e77]:
+                - paragraph [ref=e78]: Teachers
+                - paragraph [ref=e79]: "94"
+            - generic [ref=e81]:
+              - generic [ref=e83]: P
+              - generic [ref=e84]:
+                - paragraph [ref=e85]: Parents
+                - paragraph [ref=e86]: "297"
+        - table [ref=e89]:
+          - rowgroup [ref=e90]:
+            - row "User Role Status Join Date Actions" [ref=e91]:
+              - cell "User" [ref=e92]
+              - cell "Role" [ref=e93]
+              - cell "Status" [ref=e94]
+              - cell "Join Date" [ref=e95]
+              - cell "Actions" [ref=e96]
+          - rowgroup [ref=e97]:
+            - row "Admin User admin@example.com admin Edit Suspend" [ref=e98]:
+              - cell "Admin User admin@example.com" [ref=e99]:
+                - generic [ref=e100]:
+                  - generic [ref=e101]: Admin User
+                  - generic [ref=e102]: admin@example.com
+              - cell "admin" [ref=e103]:
+                - generic [ref=e104]: admin
+              - cell [ref=e105]
+              - cell [ref=e107]
+              - cell "Edit Suspend" [ref=e108]:
+                - button "Edit" [active] [ref=e109] [cursor=pointer]
+                - button "Suspend" [ref=e110] [cursor=pointer]
+            - row "Teacher One teacher@example.com teacher Edit Suspend" [ref=e111]:
+              - cell "Teacher One teacher@example.com" [ref=e112]:
+                - generic [ref=e113]:
+                  - generic [ref=e114]: Teacher One
+                  - generic [ref=e115]: teacher@example.com
+              - cell "teacher" [ref=e116]:
+                - generic [ref=e117]: teacher
+              - cell [ref=e118]
+              - cell [ref=e120]
+              - cell "Edit Suspend" [ref=e121]:
+                - button "Edit" [ref=e122] [cursor=pointer]
+                - button "Suspend" [ref=e123] [cursor=pointer]
+            - row "Student One student@example.com student Edit Suspend" [ref=e124]:
+              - cell "Student One student@example.com" [ref=e125]:
+                - generic [ref=e126]:
+                  - generic [ref=e127]: Student One
+                  - generic [ref=e128]: student@example.com
+              - cell "student" [ref=e129]:
+                - generic [ref=e130]: student
+              - cell [ref=e131]
+              - cell [ref=e133]
+              - cell "Edit Suspend" [ref=e134]:
+                - button "Edit" [ref=e135] [cursor=pointer]
+                - button "Suspend" [ref=e136] [cursor=pointer]
+            - row "Parent One parent@example.com parent Edit Suspend" [ref=e137]:
+              - cell "Parent One parent@example.com" [ref=e138]:
+                - generic [ref=e139]:
+                  - generic [ref=e140]: Parent One
+                  - generic [ref=e141]: parent@example.com
+              - cell "parent" [ref=e142]:
+                - generic [ref=e143]: parent
+              - cell [ref=e144]
+              - cell [ref=e146]
+              - cell "Edit Suspend" [ref=e147]:
+                - button "Edit" [ref=e148] [cursor=pointer]
+                - button "Suspend" [ref=e149] [cursor=pointer]
+  - contentinfo [ref=e150]:
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - heading "Contact Us" [level=3] [ref=e154]
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - img [ref=e157]
+              - link "Email support at support@inclusivelearning.edu" [ref=e160] [cursor=pointer]:
+                - /url: mailto:support@inclusivelearning.edu
+                - text: support@inclusivelearning.edu
+            - generic [ref=e161]:
+              - img [ref=e162]
+              - link "Call us at 1-234-567-8900" [ref=e164] [cursor=pointer]:
+                - /url: tel:+1234567890
+                - text: 1-234-567-8900
+        - generic [ref=e165]:
+          - heading "Quick Links" [level=3] [ref=e166]
+          - navigation "Footer navigation" [ref=e167]:
+            - list [ref=e168]:
+              - listitem [ref=e169]:
+                - link "About Us" [ref=e170] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e171]:
+                - link "Accessibility Settings" [ref=e172] [cursor=pointer]:
+                  - /url: /accessibility
+              - listitem [ref=e173]:
+                - link "Community" [ref=e174] [cursor=pointer]:
+                  - /url: /community
+        - generic [ref=e175]:
+          - heading "Accessibility" [level=3] [ref=e176]
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - img [ref=e179]
+              - generic [ref=e182]: WCAG 2.1 AA Compliant
+            - paragraph [ref=e183]: This platform is designed to be accessible to all learners, including those with disabilities.
+            - link "Customize accessibility settings" [ref=e184] [cursor=pointer]:
+              - /url: /accessibility
+      - paragraph [ref=e186]:
+        - text: © 2025 Inclusive Learning Hub. All rights reserved. |
+        - link "Privacy Policy" [ref=e187] [cursor=pointer]:
+          - /url: /privacy
+        - text: "|"
+        - link "Terms of Service" [ref=e188] [cursor=pointer]:
+          - /url: /terms
+```

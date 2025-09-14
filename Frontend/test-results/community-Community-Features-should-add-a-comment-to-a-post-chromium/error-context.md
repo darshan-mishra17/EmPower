@@ -1,0 +1,72 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "Skip to main content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - region "Accessibility toolbar" [ref=e5]:
+    - button "Accessibility Options ▼" [ref=e7] [cursor=pointer]:
+      - generic [ref=e8] [cursor=pointer]: Accessibility Options
+      - generic [ref=e9] [cursor=pointer]: ▼
+  - navigation "Main navigation" [ref=e10]:
+    - generic [ref=e12]:
+      - link "Inclusive Learning Hub - Home" [ref=e13] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14] [cursor=pointer]
+        - generic [ref=e17] [cursor=pointer]: Inclusive Learning Hub
+      - generic [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Community" [ref=e21] [cursor=pointer]:
+          - /url: /community
+        - link "Login" [ref=e22] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e23]
+  - contentinfo [ref=e24]:
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - heading "Contact Us" [level=3] [ref=e28]
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - img [ref=e31]
+              - link "Email support at support@inclusivelearning.edu" [ref=e34] [cursor=pointer]:
+                - /url: mailto:support@inclusivelearning.edu
+                - text: support@inclusivelearning.edu
+            - generic [ref=e35]:
+              - img [ref=e36]
+              - link "Call us at 1-234-567-8900" [ref=e38] [cursor=pointer]:
+                - /url: tel:+1234567890
+                - text: 1-234-567-8900
+        - generic [ref=e39]:
+          - heading "Quick Links" [level=3] [ref=e40]
+          - navigation "Footer navigation" [ref=e41]:
+            - list [ref=e42]:
+              - listitem [ref=e43]:
+                - link "About Us" [ref=e44] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e45]:
+                - link "Accessibility Settings" [ref=e46] [cursor=pointer]:
+                  - /url: /accessibility
+              - listitem [ref=e47]:
+                - link "Community" [ref=e48] [cursor=pointer]:
+                  - /url: /community
+        - generic [ref=e49]:
+          - heading "Accessibility" [level=3] [ref=e50]
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - img [ref=e53]
+              - generic [ref=e56]: WCAG 2.1 AA Compliant
+            - paragraph [ref=e57]: This platform is designed to be accessible to all learners, including those with disabilities.
+            - link "Customize accessibility settings" [ref=e58] [cursor=pointer]:
+              - /url: /accessibility
+      - paragraph [ref=e60]:
+        - text: © 2025 Inclusive Learning Hub. All rights reserved. |
+        - link "Privacy Policy" [ref=e61] [cursor=pointer]:
+          - /url: /privacy
+        - text: "|"
+        - link "Terms of Service" [ref=e62] [cursor=pointer]:
+          - /url: /terms
+```

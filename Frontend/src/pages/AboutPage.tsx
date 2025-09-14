@@ -71,7 +71,7 @@ const AboutPage: React.FC = () => {
             Our Mission: Education for Everyone
           </h1>
           <p className="text-xl text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
-            At Inclusive Learning Hub, we believe that quality education should be accessible to all learners, 
+            At EmpowerMe, we believe that quality education should be accessible to all learners, 
             regardless of their abilities, learning styles, or circumstances. We're breaking down barriers 
             and building bridges to knowledge.
           </p>

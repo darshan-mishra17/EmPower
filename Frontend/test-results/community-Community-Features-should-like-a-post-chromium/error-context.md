@@ -1,0 +1,104 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "Skip to main content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - region "Accessibility toolbar" [ref=e5]:
+    - button "Accessibility Options ▼" [ref=e7] [cursor=pointer]:
+      - generic [ref=e8] [cursor=pointer]: Accessibility Options
+      - generic [ref=e9] [cursor=pointer]: ▼
+  - navigation "Main navigation" [ref=e10]:
+    - generic [ref=e12]:
+      - link "Inclusive Learning Hub - Home" [ref=e13] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14] [cursor=pointer]
+        - generic [ref=e17] [cursor=pointer]: Inclusive Learning Hub
+      - generic [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Community" [ref=e21] [cursor=pointer]:
+          - /url: /community
+        - link "Login" [ref=e22] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e23]:
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - heading "Community Discussion" [level=1] [ref=e27]
+        - paragraph [ref=e31]:
+          - strong [ref=e32]: "Community Guidelines:"
+          - text: All discussions are AI-moderated for inclusivity and respect. Please keep conversations supportive and focused on learning accessibility.
+        - button "Start New Discussion" [ref=e33] [cursor=pointer]:
+          - img [ref=e34] [cursor=pointer]
+          - generic [ref=e35] [cursor=pointer]: Start New Discussion
+      - article [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - heading "Community Post" [level=2] [ref=e41]
+              - generic [ref=e42]:
+                - generic [ref=e43]: Student One
+                - generic [ref=e44]: student
+                - generic [ref=e45]: 9/14/2025
+            - button "Listen to post with text-to-speech" [ref=e46] [cursor=pointer]:
+              - img [ref=e47] [cursor=pointer]
+          - paragraph [ref=e51]: This is a test post content for Playwright testing.
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - button "Like this post" [active] [ref=e54] [cursor=pointer]:
+                - img [ref=e55] [cursor=pointer]
+                - generic [ref=e57] [cursor=pointer]: "0"
+              - button "0 replies" [ref=e58] [cursor=pointer]:
+                - img [ref=e59] [cursor=pointer]
+                - generic [ref=e62] [cursor=pointer]: 0 replies
+            - link "View Discussion" [ref=e63] [cursor=pointer]:
+              - /url: /community/post/68c5e6a72d03926b9984ec9e
+      - button "Load More Discussions" [ref=e65] [cursor=pointer]
+  - contentinfo [ref=e66]:
+    - generic [ref=e67]:
+      - generic [ref=e68]:
+        - generic [ref=e69]:
+          - heading "Contact Us" [level=3] [ref=e70]
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - img [ref=e73]
+              - link "Email support at support@inclusivelearning.edu" [ref=e76] [cursor=pointer]:
+                - /url: mailto:support@inclusivelearning.edu
+                - text: support@inclusivelearning.edu
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - link "Call us at 1-234-567-8900" [ref=e80] [cursor=pointer]:
+                - /url: tel:+1234567890
+                - text: 1-234-567-8900
+        - generic [ref=e81]:
+          - heading "Quick Links" [level=3] [ref=e82]
+          - navigation "Footer navigation" [ref=e83]:
+            - list [ref=e84]:
+              - listitem [ref=e85]:
+                - link "About Us" [ref=e86] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e87]:
+                - link "Accessibility Settings" [ref=e88] [cursor=pointer]:
+                  - /url: /accessibility
+              - listitem [ref=e89]:
+                - link "Community" [ref=e90] [cursor=pointer]:
+                  - /url: /community
+        - generic [ref=e91]:
+          - heading "Accessibility" [level=3] [ref=e92]
+          - generic [ref=e93]:
+            - generic [ref=e94]:
+              - img [ref=e95]
+              - generic [ref=e98]: WCAG 2.1 AA Compliant
+            - paragraph [ref=e99]: This platform is designed to be accessible to all learners, including those with disabilities.
+            - link "Customize accessibility settings" [ref=e100] [cursor=pointer]:
+              - /url: /accessibility
+      - paragraph [ref=e102]:
+        - text: © 2025 Inclusive Learning Hub. All rights reserved. |
+        - link "Privacy Policy" [ref=e103] [cursor=pointer]:
+          - /url: /privacy
+        - text: "|"
+        - link "Terms of Service" [ref=e104] [cursor=pointer]:
+          - /url: /terms
+```

@@ -20,6 +20,35 @@ const userSchema = new mongoose.Schema({
     enum: ['student', 'teacher', 'parent', 'admin'],
     required: true,
   },
+  // Student Profile Information
+  address: {
+    street: { type: String, default: '' },
+    city: { type: String, default: '' },
+    state: { type: String, default: '' },
+    zipCode: { type: String, default: '' },
+    country: { type: String, default: '' },
+  },
+  phone: { type: String, default: '' },
+  dateOfBirth: { type: Date },
+  batchNumber: {
+    type: String,
+    default: '',
+  },
+  disabilityType: [{
+    type: String,
+    enum: ['Visual Impairment', 'Hearing Impairment', 'Motor Disability', 'Cognitive Disability', 'Learning Disability', 'None'],
+  }],
+  
+  // Teacher Profile Information
+  subject: { type: String, default: '' },
+  experience: { type: Number, default: 0 },
+  qualifications: [{ type: String }],
+  teachingClasses: [{ type: String }],
+  
+  // Parent Profile Information
+  occupation: { type: String, default: '' },
+  relationship: { type: String, default: '' }, // Mother, Father, Guardian
+  
   accessibilityPreferences: {
     tts: { type: Boolean, default: false },
     stt: { type: Boolean, default: false },
@@ -33,6 +62,7 @@ const userSchema = new mongoose.Schema({
   }],
   childProfiles: [{
     childId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    relationship: { type: String, default: 'Child' },
   }],
 }, {
   timestamps: true,

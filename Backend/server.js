@@ -21,6 +21,7 @@ app.use('/users', require('./routes/userRoutes'));
 app.use('/courses', require('./routes/courseRoutes'));
 app.use('/community', require('./routes/communityRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
+app.use('/student', require('./routes/studentRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

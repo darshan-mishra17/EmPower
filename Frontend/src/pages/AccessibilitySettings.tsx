@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Volume2, Type, Eye, Palette, Keyboard, Save } from 'lucide-react';
+import { authAPI, userAPI } from '../services/api';
 
 const AccessibilitySettings: React.FC = () => {
   const [settings, setSettings] = useState({
-    textToSpeech: true,
-    speechToText: false,
+    tts: true,
+    stt: false,
     fontSize: 'large',
     highContrast: false,
-    dyslexiaFriendly: true,
-    darkMode: false,
-    keyboardNavigation: true,
-    autoReadAloud: false,
-    captionsEnabled: true,
-    animationsReduced: false,
+    dyslexiaFont: true,
   });
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const response = await authAPI.getMe();
+        const userPrefs = response.data.accessibilityPreferences;
+        setSettings(userPrefs);
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadSettings();
+  }, []);
 
   const handleToggle = (setting: keyof typeof settings) => {
     setSettings(prev => ({
@@ -26,11 +39,19 @@ const AccessibilitySettings: React.FC = () => {
     setSettings(prev => ({ ...prev, fontSize: size }));
   };
 
-  const handleSaveSettings = () => {
-    // Save settings to local storage or backend
-    localStorage.setItem('accessibilitySettings', JSON.stringify(settings));
-    alert('Settings saved successfully!');
+  const handleSaveSettings = async () => {
+    try {
+      await userAPI.updatePreferences('me', settings); // Assuming 'me' or get user id
+      alert('Settings saved successfully!');
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      alert('Failed to save settings');
+    }
   };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -60,17 +81,17 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Have text content read aloud automatically</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('textToSpeech')}
+                    onClick={() => handleToggle('tts')}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      settings.textToSpeech ? 'bg-blue-600' : 'bg-gray-200'
+                      settings.tts ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.textToSpeech}
+                    aria-checked={settings.tts}
                     aria-labelledby="tts-toggle"
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.textToSpeech ? 'translate-x-6' : 'translate-x-1'
+                        settings.tts ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -82,41 +103,21 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Use voice input for forms and quizzes</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('speechToText')}
+                    onClick={() => handleToggle('stt')}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      settings.speechToText ? 'bg-blue-600' : 'bg-gray-200'
+                      settings.stt ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.speechToText}
+                    aria-checked={settings.stt}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.speechToText ? 'translate-x-6' : 'translate-x-1'
+                        settings.stt ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <h3 className="font-medium text-gray-900">Video Captions</h3>
-                    <p className="text-sm text-gray-600">Show captions for all video content</p>
-                  </div>
-                  <button
-                    onClick={() => handleToggle('captionsEnabled')}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      settings.captionsEnabled ? 'bg-blue-600' : 'bg-gray-200'
-                    }`}
-                    role="switch"
-                    aria-checked={settings.captionsEnabled}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.captionsEnabled ? 'translate-x-6' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
-                </div>
               </div>
             </section>
 
@@ -174,16 +175,16 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Use OpenDyslexic font for easier reading</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('dyslexiaFriendly')}
+                    onClick={() => handleToggle('dyslexiaFont')}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      settings.dyslexiaFriendly ? 'bg-blue-600' : 'bg-gray-200'
+                      settings.dyslexiaFont ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.dyslexiaFriendly}
+                    aria-checked={settings.dyslexiaFont}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.dyslexiaFriendly ? 'translate-x-6' : 'translate-x-1'
+                        settings.dyslexiaFont ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -195,16 +196,16 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Use dark theme to reduce eye strain</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('darkMode')}
+                    onClick={() => {}}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      settings.darkMode ? 'bg-blue-600' : 'bg-gray-200'
+                      false ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.darkMode}
+                    aria-checked={false}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.darkMode ? 'translate-x-6' : 'translate-x-1'
+                        false ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -216,16 +217,16 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Minimize animations and transitions</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('animationsReduced')}
+                    onClick={() => {}}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      settings.animationsReduced ? 'bg-blue-600' : 'bg-gray-200'
+                      false ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.animationsReduced}
+                    aria-checked={false}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.animationsReduced ? 'translate-x-6' : 'translate-x-1'
+                        false ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -247,16 +248,16 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Improved keyboard shortcuts and focus indicators</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('keyboardNavigation')}
+                    onClick={() => {}}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                       settings.keyboardNavigation ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.keyboardNavigation}
+                    aria-checked={false}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.keyboardNavigation ? 'translate-x-6' : 'translate-x-1'
+                        false ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -268,16 +269,16 @@ const AccessibilitySettings: React.FC = () => {
                     <p className="text-sm text-gray-600">Automatically read new content when it appears</p>
                   </div>
                   <button
-                    onClick={() => handleToggle('autoReadAloud')}
+                    onClick={() => {}}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                       settings.autoReadAloud ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                     role="switch"
-                    aria-checked={settings.autoReadAloud}
+                    aria-checked={false}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-200 ${
-                        settings.autoReadAloud ? 'translate-x-6' : 'translate-x-1'
+                        false ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>

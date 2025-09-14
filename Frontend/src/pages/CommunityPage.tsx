@@ -1,55 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, Plus, ThumbsUp, Reply, Volume2, Mic } from 'lucide-react';
+import { communityAPI } from '../services/api';
+
+interface Post {
+  _id: string;
+  authorId: { name: string };
+  role: string;
+  content: string;
+  createdAt: string;
+  replies: any[];
+}
 
 const CommunityPage: React.FC = () => {
   const [showNewPost, setShowNewPost] = useState(false);
   const [newPost, setNewPost] = useState({
-    title: '',
     content: '',
-    useVoiceInput: false,
   });
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const posts = [
-    {
-      id: 1,
-      title: 'Tips for Learning with Dyslexia',
-      author: 'Sarah M.',
-      role: 'Student',
-      time: '2 hours ago',
-      content: 'I wanted to share some techniques that have helped me with reading comprehension...',
-      likes: 12,
-      replies: 8,
-      isLiked: false,
-    },
-    {
-      id: 2,
-      title: 'Accessibility Features in Math Courses',
-      author: 'Prof. Johnson',
-      role: 'Teacher',
-      time: '1 day ago',
-      content: 'Has anyone tried using the new equation reader feature? I would love to hear your feedback...',
-      likes: 24,
-      replies: 15,
-      isLiked: true,
-    },
-    {
-      id: 3,
-      title: 'Supporting My Child with ADHD',
-      author: 'Lisa K.',
-      role: 'Parent',
-      time: '2 days ago',
-      content: 'Looking for advice on how to help my son stay focused during online lessons...',
-      likes: 18,
-      replies: 22,
-      isLiked: false,
-    },
-  ];
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await communityAPI.getPosts();
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
 
-  const handleSubmitPost = (e: React.FormEvent) => {
+  const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('New post:', newPost);
-    setShowNewPost(false);
-    setNewPost({ title: '', content: '', useVoiceInput: false });
+    try {
+      await communityAPI.createPost(newPost);
+      setNewPost({ content: '' });
+      setShowNewPost(false);
+      // Refetch posts
+      const response = await communityAPI.getPosts();
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
 
   return (
@@ -89,53 +84,18 @@ const CommunityPage: React.FC = () => {
               
               <form onSubmit={handleSubmitPost} className="space-y-6">
                 <div>
-                  <label htmlFor="post-title" className="block text-sm font-medium text-gray-700 mb-2">
-                    Discussion Title
-                  </label>
-                  <input
-                    id="post-title"
-                    type="text"
-                    value={newPost.title}
-                    onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter a descriptive title..."
-                    required
-                  />
-                </div>
-
-                <div>
                   <label htmlFor="post-content" className="block text-sm font-medium text-gray-700 mb-2">
                     Your Message
                   </label>
-                  <div className="relative">
-                    <textarea
-                      id="post-content"
-                      rows={6}
-                      value={newPost.content}
-                      onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Share your thoughts, questions, or experiences..."
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setNewPost({ ...newPost, useVoiceInput: !newPost.useVoiceInput })}
-                      className={`absolute bottom-3 right-3 p-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        newPost.useVoiceInput
-                          ? 'bg-red-100 text-red-600 hover:bg-red-200'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                      aria-label={newPost.useVoiceInput ? 'Stop voice input' : 'Use voice input'}
-                    >
-                      <Mic className="h-4 w-4" />
-                    </button>
-                  </div>
-                  {newPost.useVoiceInput && (
-                    <p className="mt-2 text-sm text-blue-600 flex items-center">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse" />
-                      Voice input active - speak now
-                    </p>
-                  )}
+                  <textarea
+                    id="post-content"
+                    rows={6}
+                    value={newPost.content}
+                    onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Share your thoughts, questions, or experiences..."
+                    required
+                  />
                 </div>
 
                 <div className="flex space-x-4 pt-4">
@@ -162,22 +122,17 @@ const CommunityPage: React.FC = () => {
         <div className="space-y-6">
           {posts.map((post) => (
             <article
-              key={post.id}
+              key={post._id}
               className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden"
             >
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                      <a
-                        href={`/community/post/${post.id}`}
-                        className="hover:text-blue-600 focus:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                      >
-                        {post.title}
-                      </a>
+                      Community Post
                     </h2>
                     <div className="flex items-center space-x-4 text-sm text-gray-600">
-                      <span className="font-medium">{post.author}</span>
+                      <span className="font-medium">{post.authorId.name}</span>
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         post.role === 'Teacher' ? 'bg-green-100 text-green-800' :
                         post.role === 'Parent' ? 'bg-purple-100 text-purple-800' :
@@ -185,7 +140,7 @@ const CommunityPage: React.FC = () => {
                       }`}>
                         {post.role}
                       </span>
-                      <span>{post.time}</span>
+                      <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
                   
@@ -204,25 +159,21 @@ const CommunityPage: React.FC = () => {
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <div className="flex items-center space-x-6">
                     <button
-                      className={`flex items-center space-x-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1 ${
-                        post.isLiked 
-                          ? 'text-blue-600 hover:text-blue-700' 
-                          : 'text-gray-600 hover:text-gray-800'
-                      }`}
-                      aria-label={`${post.isLiked ? 'Unlike' : 'Like'} this post`}
+                      className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
+                      aria-label="Like this post"
                     >
-                      <ThumbsUp className={`h-5 w-5 ${post.isLiked ? 'fill-current' : ''}`} />
-                      <span className="font-medium">{post.likes}</span>
+                      <ThumbsUp className="h-5 w-5" />
+                      <span className="font-medium">0</span>
                     </button>
 
                     <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1">
                       <Reply className="h-5 w-5" />
-                      <span className="font-medium">{post.replies} replies</span>
+                      <span className="font-medium">{post.replies.length} replies</span>
                     </button>
                   </div>
 
                   <a
-                    href={`/community/post/${post.id}`}
+                    href={`/community/post/${post._id}`}
                     className="text-blue-600 hover:text-blue-800 focus:text-blue-800 font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
                   >
                     View Discussion

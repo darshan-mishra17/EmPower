@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import AccessibilityToolbar from './AccessibilityToolbar';
+import { TTSControls } from './TTSControls';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         Skip to main content
       </a>
       <AccessibilityToolbar />
+      
+      {/* TTS Controls - Fixed position for easy access */}
+      <TTSControls className="fixed top-4 right-4 z-40 max-w-sm" />
+      
       <Navbar />
       <main id="main-content" className="flex-grow" role="main">
         {children}

@@ -12,7 +12,7 @@ const LandingPage: React.FC = () => {
             id="hero-heading" 
             className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight"
           >
-            Inclusive Learning Hub
+            EmpowerMe
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
             Accessible, Adaptive, and Inclusive Education for All

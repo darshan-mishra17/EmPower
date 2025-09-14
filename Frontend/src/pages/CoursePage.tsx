@@ -1,64 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Play, Volume2, FileText, CheckCircle, Circle, ArrowRight } from 'lucide-react';
+import { courseAPI } from '../services/api';
+
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  lessons: any[];
+  quizzes: any[];
+  progress?: number;
+  totalLessons?: number;
+  completedLessons?: number;
+}
 
 const CoursePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'lessons' | 'quizzes' | 'progress'>('lessons');
   const [currentLesson, setCurrentLesson] = useState(0);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const course = {
-    id: 1,
-    title: 'Introduction to Web Development',
-    description: 'Learn the basics of HTML, CSS, and JavaScript with accessibility best practices.',
-    progress: 75,
-    totalLessons: 20,
-    completedLessons: 15,
-  };
+  useEffect(() => {
+    const fetchCourse = async () => {
+      if (!id) return;
+      try {
+        const response = await courseAPI.getCourse(id);
+        setCourse(response.data);
+      } catch (error) {
+        console.error('Error fetching course:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourse();
+  }, [id]);
 
-  const lessons = [
-    {
-      id: 1,
-      title: 'HTML Fundamentals',
-      duration: '15 min',
-      completed: true,
-      content: 'Learn the basic structure of HTML documents and semantic elements.',
-      videoUrl: 'https://example.com/video1.mp4',
-    },
-    {
-      id: 2,
-      title: 'CSS Styling Basics',
-      duration: '20 min',
-      completed: true,
-      content: 'Understand how to style your HTML with CSS properties and selectors.',
-      videoUrl: 'https://example.com/video2.mp4',
-    },
-    {
-      id: 3,
-      title: 'Accessibility in Web Design',
-      duration: '25 min',
-      completed: false,
-      content: 'Learn about WCAG guidelines and how to create accessible web experiences.',
-      videoUrl: 'https://example.com/video3.mp4',
-    },
-  ];
-
-  const quizzes = [
-    {
-      id: 1,
-      title: 'HTML Knowledge Check',
-      questions: 10,
-      completed: true,
-      score: 85,
-    },
-    {
-      id: 2,
-      title: 'CSS Fundamentals Quiz',
-      questions: 8,
-      completed: false,
-      score: null,
-    },
-  ];
+  if (loading || !course) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -72,21 +52,21 @@ const CoursePage: React.FC = () => {
           <div className="mb-4">
             <div className="flex justify-between text-sm text-gray-600 mb-1">
               <span>Course Progress</span>
-              <span>{course.progress}% Complete</span>
+              <span>{course.progress || 0}% Complete</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div
                 className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-                style={{ width: `${course.progress}%` }}
+                style={{ width: `${course.progress || 0}%` }}
                 role="progressbar"
-                aria-valuenow={course.progress}
+                aria-valuenow={course.progress || 0}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                aria-label={`Course progress: ${course.progress}%`}
+                aria-label={`Course progress: ${course.progress || 0}%`}
               />
             </div>
             <p className="text-sm text-gray-500 mt-1">
-              {course.completedLessons} of {course.totalLessons} lessons completed
+              {course.completedLessons || 0} of {course.totalLessons || course.lessons.length} lessons completed
             </p>
           </div>
         </div>
@@ -131,7 +111,7 @@ const CoursePage: React.FC = () => {
               <div className="lg:col-span-1">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Course Lessons</h2>
                 <div className="space-y-3">
-                  {lessons.map((lesson, index) => (
+                  {course.lessons.map((lesson, index) => (
                     <button
                       key={lesson.id}
                       onClick={() => setCurrentLesson(index)}
@@ -162,10 +142,10 @@ const CoursePage: React.FC = () => {
                 <div className="bg-white rounded-lg shadow-md p-6">
                   <div className="mb-6">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                      {lessons[currentLesson].title}
+                      {course.lessons[currentLesson].title}
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      {lessons[currentLesson].content}
+                      {course.lessons[currentLesson].content}
                     </p>
                   </div>
 
@@ -196,7 +176,7 @@ const CoursePage: React.FC = () => {
                   {/* Lesson Text Content */}
                   <div className="prose max-w-none mb-6">
                     <p className="text-gray-700 leading-relaxed mb-4">
-                      This lesson covers the fundamental concepts of {lessons[currentLesson].title.toLowerCase()}. 
+                      This lesson covers the fundamental concepts of {course.lessons[currentLesson].title.toLowerCase()}. 
                       You'll learn through interactive examples and hands-on practice.
                     </p>
                     <p className="text-gray-700 leading-relaxed">
@@ -227,7 +207,7 @@ const CoursePage: React.FC = () => {
                     </button>
                     
                     <button
-                      disabled={currentLesson === lessons.length - 1}
+                      disabled={currentLesson === course.lessons.length - 1}
                       onClick={() => setCurrentLesson(currentLesson + 1)}
                       className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 focus:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                     >
@@ -247,7 +227,7 @@ const CoursePage: React.FC = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Quizzes</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {quizzes.map((quiz) => (
+              {course.quizzes.map((quiz) => (
                 <div key={quiz.id} className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{quiz.title}</h3>
                   <p className="text-gray-600 mb-4">{quiz.questions} questions</p>
@@ -290,24 +270,24 @@ const CoursePage: React.FC = () => {
                 <div className="mb-2">
                   <div className="flex justify-between text-sm text-gray-600 mb-1">
                     <span>Course Completion</span>
-                    <span>{course.progress}%</span>
+                    <span>{course.progress || 0}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-4">
                     <div
                       className="bg-blue-600 h-4 rounded-full transition-all duration-300"
-                      style={{ width: `${course.progress}%` }}
+                      style={{ width: `${course.progress || 0}%` }}
                     />
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 mt-2">
-                  You've completed {course.completedLessons} out of {course.totalLessons} lessons
+                  You've completed {course.completedLessons || 0} out of {course.totalLessons || course.lessons.length} lessons
                 </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-medium text-blue-900 mb-2">Lessons Completed</h4>
-                  <p className="text-2xl font-bold text-blue-800">{course.completedLessons}</p>
+                  <p className="text-2xl font-bold text-blue-800">{course.completedLessons || 0}</p>
                   <p className="text-sm text-blue-600">out of {course.totalLessons}</p>
                 </div>
                 

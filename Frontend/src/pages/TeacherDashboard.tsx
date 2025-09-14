@@ -1,92 +1,442 @@
-import React, { useState } from 'react';
-import { Plus, BookOpen, Upload, BarChart3, FileText, Video, Image } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Users, BookOpen, ClipboardList, 
+  TrendingUp, MessageSquare,
+  Award, UserCheck, BarChart3
+} from 'lucide-react';
+
+interface Student {
+  _id: string;
+  name: string;
+  email: string;
+  batchNumber: string;
+  disabilityType: string[];
+  averageGrade: number;
+  attendancePercentage: number;
+}
+
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  totalStudents: number;
+  completionRate: number;
+}
+
+interface Assignment {
+  _id: string;
+  title: string;
+  dueDate: Date;
+  submissions: number;
+  totalStudents: number;
+}
+
+interface ClassAnalytics {
+  totalStudents: number;
+  averageGrade: number;
+  attendanceRate: number;
+  completionRate: number;
+}
 
 const TeacherDashboard: React.FC = () => {
-  const [showUploadForm, setShowUploadForm] = useState(false);
-  const [uploadForm, setUploadForm] = useState({
-    title: '',
-    description: '',
-    contentType: 'video' as 'video' | 'pdf' | 'text',
-    file: null as File | null,
-    captions: '',
-    altText: '',
-  });
+  const [students, setStudents] = useState<Student[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [analytics, setAnalytics] = useState<ClassAnalytics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
 
-  const courses = [
+  // Mock data for demo - in real app, this would come from API
+  const mockTeacher = {
+    name: "Dr. Emily Johnson",
+    email: "emily.johnson@school.edu",
+    department: "Special Education",
+    classes: ["Math 101", "Science Basics", "Communication Skills"]
+  };
+
+  const mockStudents: Student[] = [
     {
-      id: 1,
-      title: 'Introduction to Web Development',
-      students: 24,
-      progress: 78,
-      lastUpdated: '2 days ago',
+      _id: "1",
+      name: "Sarah Mitchell",
+      email: "sarah.mitchell@student.edu",
+      batchNumber: "BATCH-2024-A",
+      disabilityType: ["Visual Impairment", "Learning Disability"],
+      averageGrade: 85,
+      attendancePercentage: 92
     },
     {
-      id: 2,
-      title: 'Mathematics Foundations',
-      students: 18,
-      progress: 65,
-      lastUpdated: '1 week ago',
+      _id: "2", 
+      name: "Alex Chen",
+      email: "alex.chen@student.edu",
+      batchNumber: "BATCH-2024-A",
+      disabilityType: ["Hearing Impairment"],
+      averageGrade: 78,
+      attendancePercentage: 88
     },
+    {
+      _id: "3",
+      name: "Maria Rodriguez", 
+      email: "maria.rodriguez@student.edu",
+      batchNumber: "BATCH-2024-B",
+      disabilityType: ["Motor Disability"],
+      averageGrade: 91,
+      attendancePercentage: 95
+    }
   ];
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploadForm({ ...uploadForm, file });
+  const mockCourses: Course[] = [
+    {
+      _id: "1",
+      title: "Mathematics Fundamentals",
+      description: "Basic math concepts with visual aids",
+      totalStudents: 25,
+      completionRate: 78
+    },
+    {
+      _id: "2", 
+      title: "Science Exploration",
+      description: "Interactive science learning",
+      totalStudents: 22,
+      completionRate: 85
+    },
+    {
+      _id: "3",
+      title: "Communication Skills",
+      description: "Building effective communication",
+      totalStudents: 18,
+      completionRate: 92
     }
-  };
+  ];
 
-  const handleSubmitContent = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle content upload
-    console.log('Content uploaded:', uploadForm);
-    setShowUploadForm(false);
-    setUploadForm({
-      title: '',
-      description: '',
-      contentType: 'video',
-      file: null,
-      captions: '',
-      altText: '',
-    });
-  };
+  const mockAssignments: Assignment[] = [
+    {
+      _id: "1",
+      title: "Math Problem Set 5",
+      dueDate: new Date('2024-12-20'),
+      submissions: 18,
+      totalStudents: 25
+    },
+    {
+      _id: "2",
+      title: "Science Project Presentation",
+      dueDate: new Date('2024-12-22'),
+      submissions: 15,
+      totalStudents: 22
+    },
+    {
+      _id: "3",
+      title: "Communication Journal",
+      dueDate: new Date('2024-12-25'),
+      submissions: 16,
+      totalStudents: 18
+    }
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // In a real app, these would be actual API calls
+        setStudents(mockStudents);
+        setCourses(mockCourses);
+        setAssignments(mockAssignments);
+        
+        // Calculate analytics
+        const totalStudents = mockStudents.length;
+        const averageGrade = mockStudents.reduce((sum, s) => sum + s.averageGrade, 0) / totalStudents;
+        const attendanceRate = mockStudents.reduce((sum, s) => sum + s.attendancePercentage, 0) / totalStudents;
+        const completionRate = mockCourses.reduce((sum, c) => sum + c.completionRate, 0) / mockCourses.length;
+        
+        setAnalytics({
+          totalStudents,
+          averageGrade: Math.round(averageGrade),
+          attendanceRate: Math.round(attendanceRate),
+          completionRate: Math.round(completionRate)
+        });
+        
+      } catch (error) {
+        console.error('Error fetching teacher dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const renderOverview = () => (
+    <div className="space-y-6">
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <div className="flex items-center">
+            <Users className="h-8 w-8 text-blue-500" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Students</p>
+              <p className="text-2xl font-bold text-gray-900">{analytics?.totalStudents || 0}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <div className="flex items-center">
+            <Award className="h-8 w-8 text-green-500" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Class Average</p>
+              <p className="text-2xl font-bold text-gray-900">{analytics?.averageGrade || 0}%</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+          <div className="flex items-center">
+            <UserCheck className="h-8 w-8 text-orange-500" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Attendance Rate</p>
+              <p className="text-2xl font-bold text-gray-900">{analytics?.attendanceRate || 0}%</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+          <div className="flex items-center">
+            <TrendingUp className="h-8 w-8 text-purple-500" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Completion Rate</p>
+              <p className="text-2xl font-bold text-gray-900">{analytics?.completionRate || 0}%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Assignments */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Assignments</h3>
+        <div className="space-y-3">
+          {assignments.map((assignment) => (
+            <div key={assignment._id} className="flex items-center justify-between p-3 border rounded-lg">
+              <div>
+                <h4 className="font-medium text-gray-900">{assignment.title}</h4>
+                <p className="text-sm text-gray-600">
+                  Due: {assignment.dueDate.toLocaleDateString()}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900">
+                  {assignment.submissions}/{assignment.totalStudents} submitted
+                </p>
+                <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full"
+                    style={{ width: `${(assignment.submissions / assignment.totalStudents) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Course Performance */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Course Performance</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {courses.map((course) => (
+            <div key={course._id} className="border rounded-lg p-4">
+              <h4 className="font-medium text-gray-900 mb-2">{course.title}</h4>
+              <p className="text-sm text-gray-600 mb-3">{course.description}</p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600">{course.totalStudents} students</span>
+                <span className={`font-medium ${
+                  course.completionRate >= 90 ? 'text-green-600' :
+                  course.completionRate >= 75 ? 'text-blue-600' : 'text-orange-600'
+                }`}>
+                  {course.completionRate}% completion
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  className={`h-2 rounded-full ${
+                    course.completionRate >= 90 ? 'bg-green-500' :
+                    course.completionRate >= 75 ? 'bg-blue-500' : 'bg-orange-500'
+                  }`}
+                  style={{ width: `${course.completionRate}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStudents = () => (
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Student Management</h3>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batch</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Accommodations</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Average Grade</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Attendance</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {students.map((student) => (
+              <tr key={student._id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">{student.name}</div>
+                    <div className="text-sm text-gray-500">{student.email}</div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {student.batchNumber}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {student.disabilityType.join(', ')}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    student.averageGrade >= 90 ? 'bg-green-100 text-green-800' :
+                    student.averageGrade >= 80 ? 'bg-blue-100 text-blue-800' :
+                    student.averageGrade >= 70 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {student.averageGrade}%
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    student.attendancePercentage >= 90 ? 'bg-green-100 text-green-800' :
+                    student.attendancePercentage >= 75 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {student.attendancePercentage}%
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button className="text-blue-600 hover:text-blue-900 mr-2">View</button>
+                  <button className="text-green-600 hover:text-green-900">Message</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  const renderAssignments = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Assignment Management</h3>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+            Create New Assignment
+          </button>
+        </div>
+        <div className="space-y-4">
+          {assignments.map((assignment) => (
+            <div key={assignment._id} className="border rounded-lg p-4">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h4 className="font-medium text-gray-900">{assignment.title}</h4>
+                  <p className="text-sm text-gray-600">Due: {assignment.dueDate.toLocaleDateString()}</p>
+                </div>
+                <div className="flex space-x-2">
+                  <button className="text-blue-600 hover:text-blue-900 text-sm">Edit</button>
+                  <button className="text-green-600 hover:text-green-900 text-sm">View Submissions</button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  {assignment.submissions}/{assignment.totalStudents} submissions
+                </div>
+                <div className="w-32 bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full"
+                    style={{ width: `${(assignment.submissions / assignment.totalStudents) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading teacher dashboard...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-lg h-screen sticky top-0" role="navigation" aria-label="Teacher dashboard navigation">
+        <aside className="w-64 bg-white shadow-lg h-screen sticky top-0">
           <div className="p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Teacher Portal</h2>
+            
             <nav>
               <ul className="space-y-2">
                 <li>
-                  <a
-                    href="#courses"
-                    className="flex items-center space-x-3 text-blue-600 bg-blue-50 px-3 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    aria-current="page"
-                  >
-                    <BookOpen className="h-5 w-5" aria-hidden="true" />
-                    <span>My Courses</span>
-                  </a>
-                </li>
-                <li>
                   <button
-                    onClick={() => setShowUploadForm(true)}
-                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-left"
+                    onClick={() => setActiveTab('overview')}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md font-medium text-left transition-colors ${
+                      activeTab === 'overview' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
                   >
-                    <Upload className="h-5 w-5" aria-hidden="true" />
-                    <span>Upload Content</span>
+                    <BarChart3 className="h-5 w-5" />
+                    <span>Overview</span>
                   </button>
                 </li>
                 <li>
-                  <a
-                    href="#reports"
-                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  <button
+                    onClick={() => setActiveTab('students')}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md font-medium text-left transition-colors ${
+                      activeTab === 'students' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
                   >
-                    <BarChart3 className="h-5 w-5" aria-hidden="true" />
-                    <span>Student Reports</span>
-                  </a>
+                    <Users className="h-5 w-5" />
+                    <span>Students</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setActiveTab('courses')}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md font-medium text-left transition-colors ${
+                      activeTab === 'courses' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <BookOpen className="h-5 w-5" />
+                    <span>Courses</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setActiveTab('assignments')}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md font-medium text-left transition-colors ${
+                      activeTab === 'assignments' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <ClipboardList className="h-5 w-5" />
+                    <span>Assignments</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setActiveTab('communication')}
+                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md font-medium text-left transition-colors ${
+                      activeTab === 'communication' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <MessageSquare className="h-5 w-5" />
+                    <span>Communication</span>
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -94,206 +444,100 @@ const TeacherDashboard: React.FC = () => {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6" role="main">
+        <main className="flex-1 p-6">
+          {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Welcome, Professor Johnson! 👨‍🏫
+              Welcome, {mockTeacher.name}! 👩‍🏫
             </h1>
-            <p className="text-gray-600">
-              Manage your courses and create accessible content for all learners.
-            </p>
+            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+              <h2 className="text-lg font-semibold text-green-900 mb-2">
+                {mockTeacher.department} Department
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-green-700">Email:</span>
+                  <span className="ml-2 text-green-600">{mockTeacher.email}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-green-700">Classes:</span>
+                  <span className="ml-2 text-green-600">{mockTeacher.classes.join(', ')}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-green-700">Total Students:</span>
+                  <span className="ml-2 text-green-600">{analytics?.totalStudents || 0}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="mb-8">
-            <button
-              onClick={() => setShowUploadForm(true)}
-              className="bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center space-x-2"
-            >
-              <Plus className="h-5 w-5" aria-hidden="true" />
-              <span>Add New Course</span>
-            </button>
-          </div>
-
-          {/* Upload Content Modal */}
-          {showUploadForm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="upload-title">
-              <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-                <h2 id="upload-title" className="text-2xl font-bold text-gray-900 mb-6">
-                  Upload Course Content
-                </h2>
-                
-                <form onSubmit={handleSubmitContent} className="space-y-4">
-                  <div>
-                    <label htmlFor="content-title" className="block text-sm font-medium text-gray-700 mb-2">
-                      Content Title
-                    </label>
-                    <input
-                      id="content-title"
-                      type="text"
-                      value={uploadForm.title}
-                      onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="content-description" className="block text-sm font-medium text-gray-700 mb-2">
-                      Description
-                    </label>
-                    <textarea
-                      id="content-description"
-                      rows={3}
-                      value={uploadForm.description}
-                      onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="content-type" className="block text-sm font-medium text-gray-700 mb-2">
-                      Content Type
-                    </label>
-                    <select
-                      id="content-type"
-                      value={uploadForm.contentType}
-                      onChange={(e) => setUploadForm({ ...uploadForm, contentType: e.target.value as 'video' | 'pdf' | 'text' })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="video">Video</option>
-                      <option value="pdf">PDF Document</option>
-                      <option value="text">Text Content</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label htmlFor="content-file" className="block text-sm font-medium text-gray-700 mb-2">
-                      Upload File
-                    </label>
-                    <input
-                      id="content-file"
-                      type="file"
-                      onChange={handleFileUpload}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      accept={uploadForm.contentType === 'video' ? 'video/*' : uploadForm.contentType === 'pdf' ? '.pdf' : '*'}
-                    />
-                  </div>
-
-                  {uploadForm.contentType === 'video' && (
-                    <div>
-                      <label htmlFor="captions" className="block text-sm font-medium text-gray-700 mb-2">
-                        Captions/Subtitles (Required for accessibility)
-                      </label>
-                      <textarea
-                        id="captions"
-                        rows={3}
-                        value={uploadForm.captions}
-                        onChange={(e) => setUploadForm({ ...uploadForm, captions: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Provide video captions or subtitle text..."
-                        required
+          {/* Content based on active tab */}
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'students' && renderStudents()}
+          {activeTab === 'assignments' && renderAssignments()}
+          {activeTab === 'courses' && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Course Management</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {courses.map((course) => (
+                  <div key={course._id} className="border rounded-lg p-4">
+                    <h4 className="font-medium text-gray-900 mb-2">{course.title}</h4>
+                    <p className="text-sm text-gray-600 mb-3">{course.description}</p>
+                    <div className="flex items-center justify-between text-sm mb-2">
+                      <span className="text-gray-600">{course.totalStudents} students</span>
+                      <span className={`font-medium ${
+                        course.completionRate >= 90 ? 'text-green-600' :
+                        course.completionRate >= 75 ? 'text-blue-600' : 'text-orange-600'
+                      }`}>
+                        {course.completionRate}% completion
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+                      <div
+                        className={`h-2 rounded-full ${
+                          course.completionRate >= 90 ? 'bg-green-500' :
+                          course.completionRate >= 75 ? 'bg-blue-500' : 'bg-orange-500'
+                        }`}
+                        style={{ width: `${course.completionRate}%` }}
                       />
                     </div>
-                  )}
-
-                  <div>
-                    <label htmlFor="alt-text" className="block text-sm font-medium text-gray-700 mb-2">
-                      Alternative Text Description
-                    </label>
-                    <textarea
-                      id="alt-text"
-                      rows={2}
-                      value={uploadForm.altText}
-                      onChange={(e) => setUploadForm({ ...uploadForm, altText: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Describe the content for screen readers..."
-                      required
-                    />
+                    <div className="flex space-x-2">
+                      <button className="text-blue-600 hover:text-blue-900 text-sm">Edit Course</button>
+                      <button className="text-green-600 hover:text-green-900 text-sm">View Content</button>
+                    </div>
                   </div>
-
-                  <div className="flex space-x-4 pt-4">
-                    <button
-                      type="submit"
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Upload Content
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowUploadForm(false)}
-                      className="flex-1 bg-gray-300 hover:bg-gray-400 focus:bg-gray-400 text-gray-700 py-2 px-4 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
+                ))}
               </div>
             </div>
           )}
-
-          {/* Courses Section */}
-          <section id="courses" aria-labelledby="courses-heading">
-            <h2 id="courses-heading" className="text-2xl font-bold text-gray-900 mb-6">
-              My Courses
-            </h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {courses.map((course) => (
-                <div
-                  key={course.id}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200"
-                >
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      <a
-                        href={`/course/${course.id}`}
-                        className="hover:text-blue-600 focus:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                      >
-                        {course.title}
-                      </a>
-                    </h3>
-                    
-                    <div className="flex justify-between text-sm text-gray-600 mb-4">
-                      <span>{course.students} students enrolled</span>
-                      <span>Updated {course.lastUpdated}</span>
-                    </div>
-                    
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm text-gray-600 mb-1">
-                        <span>Course Completion</span>
-                        <span>{course.progress}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${course.progress}%` }}
-                          role="progressbar"
-                          aria-valuenow={course.progress}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                          aria-label={`Course completion: ${course.progress}%`}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="flex space-x-2">
-                      <a
-                        href={`/course/${course.id}`}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center"
-                      >
-                        Manage Course
-                      </a>
-                      <button className="bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 text-gray-700 py-2 px-4 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                        View Reports
-                      </button>
-                    </div>
-                  </div>
+          {activeTab === 'communication' && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Communication Center</h3>
+              <div className="space-y-4">
+                <div className="border rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-2">Message Students/Parents</h4>
+                  <p className="text-sm text-gray-600 mb-3">Send updates and communicate with your students and their parents</p>
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+                    Send Message
+                  </button>
                 </div>
-              ))}
+                <div className="border rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-2">Announcements</h4>
+                  <p className="text-sm text-gray-600 mb-3">Post class announcements and important updates</p>
+                  <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">
+                    Create Announcement
+                  </button>
+                </div>
+                <div className="border rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-2">Meeting Requests</h4>
+                  <p className="text-sm text-gray-600 mb-3">Schedule meetings with parents or students</p>
+                  <button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm hover:bg-purple-700">
+                    Schedule Meeting
+                  </button>
+                </div>
+              </div>
             </div>
-          </section>
+          )}
         </main>
       </div>
     </div>

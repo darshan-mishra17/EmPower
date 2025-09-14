@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-sm text-gray-300">
-            © 2025 Inclusive Learning Hub. All rights reserved. | 
+            © 2025 EmpowerMe. All rights reserved. | 
             <a 
               href="/privacy" 
               className="ml-1 text-blue-300 hover:text-blue-200 focus:text-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"

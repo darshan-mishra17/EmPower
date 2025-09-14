@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Calendar, Award, TrendingUp, Bell, MessageSquare, 
-  AlertCircle 
+  User, Calendar, Award, TrendingUp, Bell, MessageSquare, 
+  FileText, Clock, BookOpen, BarChart3, AlertCircle, CheckCircle 
 } from 'lucide-react';
 import { studentAPI } from '../services/api';
 
@@ -99,18 +99,6 @@ const ParentDashboard: React.FC = () => {
     return months[monthNumber - 1] || 'Unknown';
   };
 
-  const calculateAverageGrade = () => {
-    if (assessments.length === 0) return 'N/A';
-    const average = assessments.reduce((sum, a) => sum + a.percentage, 0) / assessments.length;
-    return average.toFixed(1) + '%';
-  };
-
-  const calculateAverageAttendance = () => {
-    if (!attendance?.monthlyData || attendance.monthlyData.length === 0) return 'N/A';
-    const average = attendance.monthlyData.reduce((sum, m) => sum + m.percentage, 0) / attendance.monthlyData.length;
-    return average.toFixed(1) + '%';
-  };
-
   const renderOverview = () => (
     <div className="space-y-6">
       {/* Quick Stats */}
@@ -120,7 +108,11 @@ const ParentDashboard: React.FC = () => {
             <Award className="h-8 w-8 text-blue-500" />
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Average Grade</p>
-              <p className="text-2xl font-bold text-gray-900">{calculateAverageGrade()}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {assessments.length > 0 ? 
+                  (assessments.reduce((sum, a) => sum + a.percentage, 0) / assessments.length).toFixed(1) + '%' 
+                  : 'N/A'}
+              </p>
             </div>
           </div>
         </div>
@@ -130,7 +122,11 @@ const ParentDashboard: React.FC = () => {
             <Calendar className="h-8 w-8 text-green-500" />
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Attendance</p>
-              <p className="text-2xl font-bold text-gray-900">{calculateAverageAttendance()}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {attendance?.monthlyData?.length > 0 ? 
+                  (attendance.monthlyData.reduce((sum, m) => sum + m.percentage, 0) / attendance.monthlyData.length).toFixed(1) + '%' 
+                  : 'N/A'}
+              </p>
             </div>
           </div>
         </div>
@@ -216,7 +212,7 @@ const ParentDashboard: React.FC = () => {
   const renderAttendance = () => (
     <div className="bg-white rounded-lg shadow p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Attendance Overview</h3>
-      {attendance?.monthlyData && attendance.monthlyData.length > 0 ? (
+      {attendance?.monthlyData ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {attendance.monthlyData.map((record, index) => (
             <div key={index} className="border rounded-lg p-4">

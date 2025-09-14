@@ -1,0 +1,130 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "Skip to main content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - region "Accessibility toolbar" [ref=e5]:
+    - button "Accessibility Options ▼" [ref=e7] [cursor=pointer]:
+      - generic [ref=e8] [cursor=pointer]: Accessibility Options
+      - generic [ref=e9] [cursor=pointer]: ▼
+  - navigation "Main navigation" [ref=e10]:
+    - generic [ref=e12]:
+      - link "Inclusive Learning Hub - Home" [ref=e13] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14] [cursor=pointer]
+        - generic [ref=e17] [cursor=pointer]: Inclusive Learning Hub
+      - generic [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Community" [ref=e21] [cursor=pointer]:
+          - /url: /community
+        - link "Login" [ref=e22] [cursor=pointer]:
+          - /url: /login
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e26]:
+        - heading "Introduction to Inclusive Education" [level=1] [ref=e27]
+        - paragraph [ref=e28]: Learn the basics of inclusive education practices.
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - generic [ref=e31]: Course Progress
+            - generic [ref=e32]: 0% Complete
+          - generic [ref=e33]:
+            - 'progressbar "Course progress: 0%"'
+          - paragraph [ref=e34]: 0 of 1 lessons completed
+      - tablist "Course sections" [ref=e37]:
+        - tab "Lessons" [selected] [ref=e38] [cursor=pointer]:
+          - img [ref=e39] [cursor=pointer]
+          - generic [ref=e41] [cursor=pointer]: Lessons
+        - tab "Quizzes" [ref=e42] [cursor=pointer]:
+          - img [ref=e43] [cursor=pointer]
+          - generic [ref=e46] [cursor=pointer]: Quizzes
+        - tab "Progress" [ref=e47] [cursor=pointer]:
+          - img [ref=e48] [cursor=pointer]
+          - generic [ref=e51] [cursor=pointer]: Progress
+      - tabpanel [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - heading "Course Lessons" [level=2] [ref=e56]
+            - button "What is Inclusive Education?" [ref=e58] [cursor=pointer]:
+              - generic [ref=e59] [cursor=pointer]:
+                - img [ref=e60] [cursor=pointer]
+                - generic [ref=e62] [cursor=pointer]:
+                  - paragraph [ref=e63] [cursor=pointer]: What is Inclusive Education?
+                  - paragraph
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - heading "What is Inclusive Education?" [level=3] [ref=e67]
+              - paragraph [ref=e68]: Inclusive education is about ensuring that all students, regardless of ability, have access to quality education.
+            - generic [ref=e69]:
+              - generic [ref=e71]:
+                - img [ref=e72]
+                - paragraph [ref=e74]: Video content would play here
+                - paragraph [ref=e75]: Captions and audio descriptions available
+              - generic [ref=e76]:
+                - button "Play Video" [ref=e77] [cursor=pointer]:
+                  - img [ref=e78] [cursor=pointer]
+                  - generic [ref=e80] [cursor=pointer]: Play Video
+                - button "Listen (TTS)" [ref=e81] [cursor=pointer]:
+                  - img [ref=e82] [cursor=pointer]
+                  - generic [ref=e86] [cursor=pointer]: Listen (TTS)
+            - generic [ref=e87]:
+              - paragraph [ref=e88]: This lesson covers the fundamental concepts of what is inclusive education?. You'll learn through interactive examples and hands-on practice.
+              - paragraph [ref=e89]: All content is designed with accessibility in mind, featuring clear visual hierarchy, descriptive alt text for images, and comprehensive audio descriptions for video content.
+            - generic [ref=e90]:
+              - button "Previous" [disabled] [ref=e91]:
+                - img [ref=e92]
+                - generic [ref=e94]: Previous
+              - button "Mark as Complete" [ref=e95] [cursor=pointer]
+              - button "Next" [disabled] [ref=e96]:
+                - generic [ref=e97]: Next
+                - img [ref=e98]
+  - contentinfo [ref=e100]:
+    - generic [ref=e101]:
+      - generic [ref=e102]:
+        - generic [ref=e103]:
+          - heading "Contact Us" [level=3] [ref=e104]
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - img [ref=e107]
+              - link "Email support at support@inclusivelearning.edu" [ref=e110] [cursor=pointer]:
+                - /url: mailto:support@inclusivelearning.edu
+                - text: support@inclusivelearning.edu
+            - generic [ref=e111]:
+              - img [ref=e112]
+              - link "Call us at 1-234-567-8900" [ref=e114] [cursor=pointer]:
+                - /url: tel:+1234567890
+                - text: 1-234-567-8900
+        - generic [ref=e115]:
+          - heading "Quick Links" [level=3] [ref=e116]
+          - navigation "Footer navigation" [ref=e117]:
+            - list [ref=e118]:
+              - listitem [ref=e119]:
+                - link "About Us" [ref=e120] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e121]:
+                - link "Accessibility Settings" [ref=e122] [cursor=pointer]:
+                  - /url: /accessibility
+              - listitem [ref=e123]:
+                - link "Community" [ref=e124] [cursor=pointer]:
+                  - /url: /community
+        - generic [ref=e125]:
+          - heading "Accessibility" [level=3] [ref=e126]
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - img [ref=e129]
+              - generic [ref=e132]: WCAG 2.1 AA Compliant
+            - paragraph [ref=e133]: This platform is designed to be accessible to all learners, including those with disabilities.
+            - link "Customize accessibility settings" [ref=e134] [cursor=pointer]:
+              - /url: /accessibility
+      - paragraph [ref=e136]:
+        - text: © 2025 Inclusive Learning Hub. All rights reserved. |
+        - link "Privacy Policy" [ref=e137] [cursor=pointer]:
+          - /url: /privacy
+        - text: "|"
+        - link "Terms of Service" [ref=e138] [cursor=pointer]:
+          - /url: /terms
+```

@@ -1,36 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, FileText, BarChart3, Shield, CheckCircle, AlertTriangle, X } from 'lucide-react';
+import { adminAPI } from '../services/api';
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  id?: string;
+  status?: string;
+  joinDate?: string;
+}
+
+interface Course {
+  _id: string;
+  title: string;
+  createdBy: { name: string };
+  approved: boolean;
+}
+
+interface ContentReview {
+  id: string;
+  title: string;
+  teacher: string;
+  uploadDate: string;
+  status: 'Pending' | 'Approved' | 'Rejected' | 'Pending Review';
+  type: string;
+  accessibilityScore: number;
+  issues: { type: string; description: string }[];
+}
 
 const AdminPanel: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'users' | 'content' | 'analytics'>('users');
+  const [users, setUsers] = useState<User[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [contentReviews, setContentReviews] = useState<ContentReview[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const users = [
-    { id: 1, name: 'Sarah Johnson', email: 'sarah@email.com', role: 'Student', status: 'Active', joinDate: '2025-01-15' },
-    { id: 2, name: 'Prof. Michael Chen', email: 'mchen@email.com', role: 'Teacher', status: 'Active', joinDate: '2025-01-10' },
-    { id: 3, name: 'Lisa Williams', email: 'lwilliams@email.com', role: 'Parent', status: 'Active', joinDate: '2025-01-12' },
-    { id: 4, name: 'David Brown', email: 'dbrown@email.com', role: 'Student', status: 'Pending', joinDate: '2025-01-20' },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [usersRes, coursesRes] = await Promise.all([
+          adminAPI.getUsers(),
+          adminAPI.getCourses(),
+        ]);
+        setUsers(usersRes.data);
+        setCourses(coursesRes.data);
+        
+        // Initialize sample content reviews
+        setContentReviews([
+          {
+            id: '1',
+            title: 'Introduction to Mathematics',
+            teacher: 'Emily Johnson',
+            uploadDate: '2024-01-15',
+            status: 'Pending Review',
+            type: 'Course Material',
+            accessibilityScore: 85,
+            issues: [
+              { type: 'Alt Text', description: 'Missing alt text for images' },
+              { type: 'Color Contrast', description: 'Low contrast in some sections' }
+            ]
+          },
+          {
+            id: '2',
+            title: 'Science Fundamentals',
+            teacher: 'John Smith',
+            uploadDate: '2024-01-10',
+            status: 'Approved',
+            type: 'Interactive Content',
+            accessibilityScore: 95,
+            issues: []
+          }
+        ]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const contentReviews = [
-    {
-      id: 1,
-      title: 'Introduction to Web Development',
-      teacher: 'Prof. Chen',
-      uploadDate: '2025-01-18',
-      status: 'Pending Review',
-      accessibilityScore: 85,
-      issues: ['Missing alt text for 2 images', 'Video needs captions'],
-    },
-    {
-      id: 2,
-      title: 'Mathematics Fundamentals',
-      teacher: 'Prof. Williams',
-      uploadDate: '2025-01-16',
-      status: 'Approved',
-      accessibilityScore: 95,
-      issues: [],
-    },
-  ];
+  const handleApproveCourse = async (courseId: string) => {
+    try {
+      await adminAPI.approveCourse(courseId);
+      setCourses(courses.map(c => c._id === courseId ? { ...c, approved: true } : c));
+    } catch (error) {
+      console.error('Error approving course:', error);
+    }
+  };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   const analytics = {
     totalUsers: 1247,
@@ -266,7 +329,7 @@ const AdminPanel: React.FC = () => {
                           {content.issues.map((issue, index) => (
                             <li key={index} className="flex items-center text-sm text-red-600">
                               <X className="h-3 w-3 mr-2" />
-                              {issue}
+                              <strong>{issue.type}:</strong> {issue.description}
                             </li>
                           ))}
                         </ul>
